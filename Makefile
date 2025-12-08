@@ -3,7 +3,6 @@ TCPLIBS=
 
 OFILES=\
 	channel.o\
-	context.o\
 	fd.o\
 	net.o\
 	print.o\
@@ -13,10 +12,9 @@ OFILES=\
 
 all: $(LIB) primes tcpproxy testdelay
 
-$(OFILES): taskimpl.h task.h power-ucontext.h
-
-AS=gcc -c
-CC=gcc
+$(OFILES): taskimpl.h task.h 
+AS=musl-gcc -c
+CC=musl-gcc
 CFLAGS=-Wall -c -I. -ggdb
 
 %.o: %.S

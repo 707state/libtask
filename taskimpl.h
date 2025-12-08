@@ -1,28 +1,6 @@
 /* Copyright (c) 2005-2006 Russ Cox, MIT; see COPYRIGHT */
 
-#if defined(__sun__)
-#	define __EXTENSIONS__ 1 /* SunOS */
-#	if defined(__SunOS5_6__) || defined(__SunOS5_7__) || defined(__SunOS5_8__)
-		/* NOT USING #define __MAKECONTEXT_V2_SOURCE 1 / * SunOS */
-#	else
-#		define __MAKECONTEXT_V2_SOURCE 1
-#	endif
-#endif
-
 #define USE_UCONTEXT 1
-
-#if defined(__OpenBSD__) || defined(__mips__)
-#undef USE_UCONTEXT
-#define USE_UCONTEXT 0
-#endif
-
-#if defined(__APPLE__)
-#include <AvailabilityMacros.h>
-#if defined(MAC_OS_X_VERSION_10_5)
-#undef USE_UCONTEXT
-#define USE_UCONTEXT 0
-#endif
-#endif
 
 #include <errno.h>
 #include <stdlib.h>

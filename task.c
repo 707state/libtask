@@ -2,6 +2,7 @@
 
 #include "taskimpl.h"
 #include <fcntl.h>
+#include <signal.h>
 #include <stdio.h>
 
 int taskdebuglevel;
