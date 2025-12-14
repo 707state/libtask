@@ -94,10 +94,10 @@ static Task *taskalloc(void (*fn)(void *), void *arg, uint stack) {
   /* do a reasonable initialization */
   memset(&t->context.uc, 0, sizeof t->context.uc);
   sigemptyset(&zero);
-  sigprocmask(SIG_BLOCK, &zero, &t->context.uc.uc_sigmask);
+  sigprocmask(SIG_BLOCK, &zero, &t->context.sigmask);
 
   /* must initialize with current context */
-  if (getcontext(&t->context.uc) < 0) {
+  if (libucontext_getcontext(&t->context.uc) < 0) {
     fprint(2, "getcontext: %r\n");
     abort();
   }
@@ -122,7 +122,7 @@ static Task *taskalloc(void (*fn)(void *), void *arg, uint stack) {
   y = z;
   z >>= 16; /* hide undefined 32-bit shift from 32-bit compilers */
   x = z >> 16;
-  makecontext(&t->context.uc, (void (*)())taskstart, 2, y, x);
+  libucontext_makecontext(&t->context.uc, (void (*)())taskstart, 2, y, x);
 
   return t;
 }
@@ -185,7 +185,7 @@ void taskexit(int val) {
 }
 
 static void contextswitch(Context *from, Context *to) {
-  if (swapcontext(&from->uc, &to->uc) < 0) {
+  if (libucontext_swapcontext(&from->uc, &to->uc) < 0) {
     fprint(2, "swapcontext failed: %r\n");
     assert(0);
   }
